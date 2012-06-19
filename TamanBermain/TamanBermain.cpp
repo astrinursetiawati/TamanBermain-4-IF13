@@ -287,6 +287,22 @@ void drawSceneTanah(Terrain *terrain, GLfloat r, GLfloat g, GLfloat b) {
 	}
 
 }
+void alas()
+{
+glPushMatrix();
+glBegin(GL_POLYGON);
+glTexCoord2f(0.0, 0.0);
+glVertex3f(1, 10, 0.0);
+glTexCoord2f(1.0, 0.0);
+glVertex3f(10, 10, 0.0);
+glTexCoord2f(1.0, 1.0);
+glVertex3f(10, 20, 0.0);
+glTexCoord2f(0.0, 1.0);
+glVertex3f(1, 20, 0.0);
+glEnd();
+
+glPopMatrix();
+}
 
 void pohon(){
 	glColor3f(0.8, 0.5, 0.2);
@@ -324,6 +340,62 @@ void pohon(){
 
 }
 
+void pagar()
+{
+	//pagar bawah
+	glColor3f(0.5, 0.0, 0.0);
+	glPushMatrix();
+	glTranslatef(0, 0, 0);
+	glScalef(19.9, 0.2, 0.03);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	//pagar ataas
+	glPushMatrix();
+	glTranslatef(0, 0.3, 0);
+	glScalef(19.9, 0.2, 0.03);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	//tiang tengah
+	glPushMatrix();
+	glScalef(0.2, 1, 0.1);
+	glTranslatef(0, 0.0, 0);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	//tiang kanan
+	glPushMatrix();
+	glTranslatef(10, 0.0, 0);
+	glScalef(0.2, 1, 0.2);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	//tiang kiri
+	glPushMatrix();
+	glTranslatef(-10, 0.0, 0);
+	glScalef(0.2, 1, 0.2);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+}
+
+void lampu()
+{
+glColor3f(1,1,1);
+   //lampu
+   glPushMatrix();
+   glTranslatef(0,18,0);
+   glScalef(5,5,5);
+   glutSolidSphere(1.0, 20, 16);
+   glPopMatrix();
+   //batang
+ 
+   glPushMatrix();
+   glTranslatef(0,7,0);
+   glScalef(0.8,14,0.8);
+   glutSolidSphere(1.0, 20, 16);
+   glPopMatrix();
+}
 
 
 
@@ -339,6 +411,58 @@ void display(void) {
 
 		
 	
+	// lampu 1
+	glPushMatrix();
+	glTranslatef(110,0,-18);
+	lampu();
+	glPopMatrix();
+
+	//lampu 2
+	glPushMatrix();
+	glTranslatef(110,0, 14);
+	lampu();
+	glPopMatrix();
+	
+		
+
+	//pagar samping depan
+	glPushMatrix();
+	glTranslatef(3, 0, 70);
+	glScalef(10, 10, 10);
+	pagar();
+	glPopMatrix();
+
+	//pagar samping belakang
+	glPushMatrix();
+	glTranslatef(3, 0, -70);
+	glScalef(10, 10, 10);
+	pagar();
+	glPopMatrix();
+
+	//pagar belakang
+	glPushMatrix();
+	glTranslatef(-97, 0, 0);
+	glScalef(10, 10, 7);
+	glRotatef(90, 0, 1, 0);
+	pagar();
+	glPopMatrix();
+
+	//pagar depan depan
+	glPushMatrix();
+	glTranslatef(103, 0, -45);
+	glScalef(10, 10, 2.6);
+	glRotatef(90, 0, 1, 0);
+	pagar();
+	glPopMatrix();
+
+	//pagar depan belakang
+	glPushMatrix();
+	glTranslatef(103, 0, 45);
+	glScalef(10, 10, 2.6);
+	glRotatef(90, 0, 1, 0);
+	pagar();
+	glPopMatrix();
+
 	
 
 
@@ -433,7 +557,20 @@ static void specialKeyboard(int key, int x, int y) {
 		viewx = viewx - 15;
 		break;
 
-		
+		case GLUT_KEY_F1: {
+		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+		glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	}
+		;
+		break;
+	case GLUT_KEY_F2: {
+		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient2);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse2);
+		glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	}
 /* Kamera untuk pembangunan dan pengeditan
 	case GLUT_KEY_HOME:	
 		camposy = camposy+15;
