@@ -42,7 +42,118 @@ static int viewy = 100;
 static int viewz = 200;
 float rot = 0;
 
+struct Gambar {
+	unsigned long sizeX;
+	unsigned long sizeY;
+	char *data;
+};
+typedef struct Gambar Gambar; //struktur data untuk
 
+
+//ukuran gambar #bisa di set sesuai kebutuhan
+
+
+//mengambil gambar BMP
+int GambarLoad(char *filename, Gambar *gambar) {
+	FILE *file;
+	unsigned long size; // ukuran gambar dalam bytes
+	unsigned long i; // standard counter.
+	unsigned short int plane; // number of planes in gambar
+
+	unsigned short int bpp; // jumlah bits per pixel
+	char temp; // temporary color storage for var warna sementara untuk memastikan filenya ada
+
+
+	if ((file = fopen(filename, "rb")) == NULL) {
+		printf("File Not Found : %s\n", filename);
+		return 0;
+	}
+	// mencari file header bmp
+	fseek(file, 18, SEEK_CUR);
+	// read the width
+	if ((i = fread(&gambar->sizeX, 4, 1, file)) != 1) {
+		printf("Error reading width from %s.\n", filename);
+		return 0;
+	}
+	//printf("Width of %s: %lu\n", filename, gambar->sizeX);
+	// membaca nilai height
+	if ((i = fread(&gambar->sizeY, 4, 1, file)) != 1) {
+		printf("Error reading height from %s.\n", filename);
+		return 0;
+	}
+	//printf("Height of %s: %lu\n", filename, gambar->sizeY);
+	//menghitung ukuran gambar(asumsi 24 bits or 3 bytes per pixel).
+
+	size = gambar->sizeX * gambar->sizeY * 3;
+	// read the planes
+	if ((fread(&plane, 2, 1, file)) != 1) {
+		printf("Error reading planes from %s.\n", filename);
+		return 0;
+	}
+	if (plane != 1) {
+		printf("Planes from %s is not 1: %u\n", filename, plane);
+		return 0;
+	}
+	// read the bitsperpixel
+	if ((i = fread(&bpp, 2, 1, file)) != 1) {
+		printf("Error reading bpp from %s.\n", filename);
+
+		return 0;
+	}
+	if (bpp != 24) {
+		printf("Bpp from %s is not 24: %u\n", filename, bpp);
+		return 0;
+	}
+	// seek past the rest of the bitmap header.
+	fseek(file, 24, SEEK_CUR);
+	// read the data.
+	gambar->data = (char *) malloc(size);
+	if (gambar->data == NULL) {
+		printf("Error allocating memory for color-corrected gambar data");
+		return 0;
+	}
+	if ((i = fread(gambar->data, size, 1, file)) != 1) {
+		printf("Error reading gambar data from %s.\n", filename);
+		return 0;
+	}
+	for (i = 0; i < size; i += 3) { // membalikan semuan nilai warna (gbr - > rgb)
+		temp = gambar->data[i];
+		gambar->data[i] = gambar->data[i + 2];
+		gambar->data[i + 2] = temp;
+	}
+	// we're done.
+	return 1;
+}
+
+//mengambil tekstur
+Gambar * loadTexture() {
+	Gambar *gambar1;
+	// alokasi memmory untuk tekstur
+	gambar1 = (Gambar *) malloc(sizeof(Gambar));
+	if (gambar1 == NULL) {
+		printf("Error allocating space for gambar");
+		exit(0);
+	}
+	//pic.bmp is a 64x64 picture
+	if (!GambarLoad("beton.bmp", gambar1)) {
+		exit(1);
+	}
+	return gambar1;
+}
+Gambar * loadTextureDua() {
+	Gambar *gambar1;
+	// alokasi memmory untuk tekstur
+	gambar1 = (Gambar *) malloc(sizeof(Gambar));
+	if (gambar1 == NULL) {
+		printf("Error allocating space for gambar");
+		exit(0);
+	}
+	//pic.bmp is a 64x64 picture
+	if (!GambarLoad("water.bmp", gambar1)) {
+		exit(1);
+	}
+	return gambar1;
+}
 //train 2D
 //class untuk terain 2D
 class Terrain {
@@ -351,7 +462,98 @@ glColor3f(0, 0, 1);
 	glPopMatrix();
 
 }
+void komediPutar()
+{
+	//dasar
+	glColor3f(1.0, 0.0, 0.5);	
+	glPushMatrix();	
+	glTranslatef(0, 2, 0);
+	glScalef(2, 0.01, 2);
+	glutSolidSphere(1, 20, 6);
+	glPopMatrix();
+	
+	//pegangan
+	glColor3f(1.0, 0.0, 0.4);
+	glPushMatrix();
+	glScalef(0.5, 0.5, 0.5);
+	glTranslatef(0, 5, 0);
+	
 
+	glPushMatrix();	
+	glRotatef(90, 1.0, 0.0, 0.0);
+	glTranslatef(0, 0, 0);
+	glScalef(0.2, 0.2, 0.2);
+	glutSolidTorus(0.5, 4, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, 0);
+	glScalef(0.8, 0.1, 0.1);
+	glutSolidSphere(1, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 0, 0);
+	glScalef(0.1, 0.1, 0.8);
+	glutSolidSphere(1, 20, 20);
+	glPopMatrix();
+	glPopMatrix();
+	
+	//batang tengah
+	glPushMatrix();
+	glTranslatef(0, 2, 0);
+	glScalef(0.1, 1, 0.1);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	//pagar samping
+	glColor3f(1.0, 0.0, 0.0);
+	glPushMatrix();
+	glTranslatef(0, 2.5, 0);	
+	glPushMatrix();	
+	glRotatef(90, 1.0, 0.0, 0.0);
+	glTranslatef(0, 0, 0);
+	glScalef(0.5, 0.5, 0.5);
+	glutSolidTorus(0.1, 4, 20, 12);
+	glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(1.98, 2.25, 0);
+	glScalef(0.05, 0.27, 0.05);
+	glutSolidSphere(1, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1.98, 2.25, 0);
+	glScalef(0.05, 0.27, 0.05);
+	glutSolidSphere(1, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1, 2.25, 1.74);
+	glScalef(0.05, 0.27, 0.05);
+	glutSolidSphere(1, 20, 20);
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(1, 2.25, 1.74);
+	glScalef(0.05, 0.27, 0.05);
+	glutSolidSphere(1, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1, 2.25, -1.74);
+	glScalef(0.05, 0.27, 0.05);
+	glutSolidSphere(1, 20, 20);
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(1, 2.25, -1.74);
+	glScalef(0.05, 0.27, 0.05);
+	glutSolidSphere(1, 20, 20);
+	glPopMatrix();
+}
 void pohon(){
 	glColor3f(0.8, 0.5, 0.2);
 	//<<<<<<<<<<<<<<<<<<<< Batang >>>>>>>>>>>>>>>>>>>>>>>
@@ -518,7 +720,15 @@ void pagar()
 	glutSolidCube(1.0);
 	glPopMatrix();
 }
-
+void bola()
+{
+	glPushMatrix();
+	glLineWidth(3);
+	glScalef(1, 1, 1);
+	glRotatef(90,1,0,0);
+	glutWireSphere(2.0, 10, 10);
+	glPopMatrix();
+}
 void lampu()
 {
 glColor3f(1,1,1);
@@ -550,7 +760,13 @@ void display(void) {
 	gluLookAt(viewx, viewy, viewz, 0.0, 0.0, 5.0, 0.0, 1.0, 0.0);
 
 		
-	
+	//gelantungan bola
+	glPushMatrix();
+	glColor3f(0.6, 1.0, 0.6);
+	glTranslatef(-30, 17, -20);
+	glScalef(10, 10, 10);
+	bola();
+	glPopMatrix();
 	
 	// lampu 1
 	glPushMatrix();
@@ -580,7 +796,38 @@ void display(void) {
 	ayunan();
 	glPopMatrix();
 
-	
+	//komedi putar
+	glPushMatrix();
+	glColor3f(1, 0, 0);
+	glTranslatef(40, -15, 40);
+	glRotatef(spin, 0.0, 1.0, 0.0);
+	glScalef(10, 10, 10);
+	komediPutar();
+	glPopMatrix();
+
+	//alas beton lapangan
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D,texture[0]);
+	glTranslatef(-120, -2, 210);
+	glRotatef(270, 1.0, 0.0, 0.0);
+	glScalef(22.5, 14, 0);
+	alas();
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
+
+	//alas beton pintu masuk
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D,texture[0]);
+	glTranslatef(99.7, -2, 50);
+	glRotatef(270, 1.0, 0.0, 0.0);
+	glScalef(5.0, 3.5, 0);
+	alas();
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();	
 
 	//pagar samping depan
 	glPushMatrix();
@@ -689,7 +936,43 @@ glEnable(GL_DEPTH_TEST);
 	_terrainAir = loadTerrain("heightmapAir.bmp", 20);
 
 	//binding texture
-    
+    //glClearColor(0.5, 0.5, 0.5, 0.0);
+	Gambar *gambar1 = loadTexture();
+	Gambar *gambar2 = loadTextureDua();
+
+	if (gambar1 == NULL) {
+		printf("Gambar was not returned from loadTexture\n");
+		exit(0);
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	// Generate texture/ membuat texture
+	glGenTextures(2, texture);
+
+	//binding texture untuk membuat texture 2D
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+
+	//menyesuaikan ukuran textur ketika gambar lebih besar dari texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //
+	//menyesuaikan ukuran textur ketika gambar lebih kecil dari texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //
+
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, gambar1->sizeX, gambar1->sizeY, 0, GL_RGB,
+			GL_UNSIGNED_BYTE, gambar1->data);
+
+	//tekstur air
+
+	//binding texture untuk membuat texture 2D
+	glBindTexture(GL_TEXTURE_2D, texture[2]);
+
+	//menyesuaikan ukuran textur ketika gambar lebih besar dari texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); //
+	//menyesuaikan ukuran textur ketika gambar lebih kecil dari texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //
+
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, gambar2->sizeX, gambar2->sizeY, 0, GL_RGB,
+			GL_UNSIGNED_BYTE, gambar2->data);	
 }
 
 static void specialKeyboard(int key, int x, int y) {
