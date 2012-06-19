@@ -1,0 +1,18 @@
+﻿Build started 19/06/2012 16:31:16.
+     1>Project "D:\Dokument\Kuliah\Semester VIII\Komputer Grafik\TamanBermain\terrain\terrain.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\TamanBermain.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Release\TamanBermain.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Release\TamanBermain.pch" /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt imageloader.cpp TamanBermain.cpp vec3f.cpp
+         imageloader.cpp
+         TamanBermain.cpp
+     1>C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdlib.h(353): error C2381: 'exit' : redefinition; __declspec(noreturn) differs
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\glut.h(146) : see declaration of 'exit'
+         vec3f.cpp
+     1>Done Building Project "D:\Dokument\Kuliah\Semester VIII\Komputer Grafik\TamanBermain\terrain\terrain.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:03.54
