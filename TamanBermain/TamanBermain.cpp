@@ -22,7 +22,7 @@
 #include "vec3f.h"
 #endif
 
-static int spin = 0;
+static int spin = 0 , jungkat = 0, ayun = 0;
 float angle = 0;
 using namespace std;
 GLuint texture[2];
@@ -303,6 +303,54 @@ glEnd();
 
 glPopMatrix();
 }
+void jungkit() {
+    //papan
+glColor3f(0.5, 0.5, 1);
+	glPushMatrix();
+	glRotatef(jungkat, 0.0, 0.0, 1.0);
+	glPushMatrix();		
+	glScalef(5.5, 0.1, 1.0);	
+	glutSolidCube(1.0);
+	glPopMatrix();	
+
+glColor3f(0, 0, 1);
+	//Pegangan 1
+	glPushMatrix();
+	glScalef(0.1, 0.1, 1.0);
+	glTranslatef(-17, 4, 0);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glScalef(0.1, 0.5, 0.2);
+	glTranslatef(-17, 0.3, 0);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+
+	//Pegangan 2
+	glPushMatrix();
+	glScalef(0.1, 0.1, 1.0);
+	glTranslatef(17, 4, 0);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glScalef(0.1, 0.5, 0.2);
+	glTranslatef(17, 0.3, 0);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPopMatrix();
+
+	//papan tahanan
+	glPushMatrix();
+	glScalef(0.2, 1, 1.0);
+	glTranslatef(0, -0.5, 0);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+}
 
 void pohon(){
 	glColor3f(0.8, 0.5, 0.2);
@@ -339,7 +387,99 @@ void pohon(){
 
 
 }
+void ayunan(){
+	//ayunan 1
+	glColor3f(1, 1, 1);
+	glPushMatrix();
+	glTranslatef(0, 2.5, 0);
+	glRotatef(ayun, 0.0, 0.0, 1.0);
+	
+	glPushMatrix();	
+	glTranslatef(0, -1.7, 1);
+	glScalef(0.02, 3.5, 0.02);
+	glutSolidCube(1.0);
+	glPopMatrix();
 
+	glPushMatrix();
+	glTranslatef(0, -1.7, 2);
+	glScalef(0.02, 3.5, 0.02);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, -3.4, 1.5);
+	glScalef(0.7, 0.1, 1);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+	glPopMatrix();
+
+	//ayunan 2
+	glColor3f(1, 1, 1);
+	glPushMatrix();
+	glTranslatef(0, 2.5, 0);
+	glRotatef(ayun, 0.0, 0.0, 1.0);
+	
+	glPushMatrix();	
+	glTranslatef(0, -1.7, 3);
+	glScalef(0.02, 3.5, 0.02);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, -1.7, 4);
+	glScalef(0.02, 3.5, 0.02);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, -3.4, 3.5);
+	glScalef(0.7, 0.1, 1);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+	glPopMatrix();
+
+
+	//<<<<<<<<<<<<<<<<<<<< Tiang>>>>>>>>>>>>>>>>>>>>>>>
+	//glRotatef(RotateX, 0.0, 1.0, 0);
+	
+	glColor3f(1, 0.8, 1);
+	glPushMatrix();
+	glTranslatef(0, 2.6, 2.2);
+	glScalef(0.1, 0.1, 4.4);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	//tiang 1
+	glPushMatrix();
+	glRotatef(20, 0.0, 0.0, 1.0);
+	glTranslatef(0.9, 0, 0);	
+	glScalef(0.1, 5, 0.1);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(340, 0.0, 0.0, 1.0);
+	glTranslatef(-0.9, 0, 0);	
+	glScalef(0.1, 5, 0.1);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	//tiang 2
+	glPushMatrix();
+	glRotatef(20, 0.0, 0.0, 1.0);
+	glTranslatef(0.9, 0, 4.5);	
+	glScalef(0.1, 5, 0.1);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(340, 0.0, 0.0, 1.0);
+	glTranslatef(-0.9, 0, 4.5);	
+	glScalef(0.1, 5, 0.1);	
+	glutSolidCube(1.0);
+	glPopMatrix();
+	//<<<<<<<<<<<<<<<<<<<< end Tiang>>>>>>>>>>>>>>>>>>>>>>>
+}
 void pagar()
 {
 	//pagar bawah
@@ -411,6 +551,7 @@ void display(void) {
 
 		
 	
+	
 	// lampu 1
 	glPushMatrix();
 	glTranslatef(110,0,-18);
@@ -423,7 +564,23 @@ void display(void) {
 	lampu();
 	glPopMatrix();
 	
-		
+	//Jungkat Jungkit
+	glPushMatrix();	
+	glRotatef(330, 0.0, 1.0, 0.0);
+	glTranslatef(40, 7, -60);
+	glScalef(10, 10, 10);
+	jungkit();
+	glPopMatrix();
+
+	//ayunan
+	glPushMatrix();	
+	glTranslatef(-60, 8, 15);
+	glScalef(10, 10, 10);
+	glRotatef(357, 0, 1, 0);
+	ayunan();
+	glPopMatrix();
+
+	
 
 	//pagar samping depan
 	glPushMatrix();
@@ -623,6 +780,54 @@ static void specialKeyboard(int key, int x, int y) {
 
 void keyboard(unsigned char key, int x, int y) {	
 	
+	if (key == 'j') {		
+		if (jungkat < 20)
+			{
+				jungkat = jungkat + 2;
+			}
+			else if(jungkat == 20)
+				{
+					jungkat = 380;
+				}		
+				else if (jungkat <=380 && jungkat >340)
+					{
+						jungkat = jungkat - 2;
+					}
+					else if (jungkat ==340)
+						{
+							jungkat = -20;
+						}	
+	}
+
+	if (key == 'y') {
+		if (ayun < 20)
+			{
+				ayun = ayun + 2;
+			}
+			else if(ayun == 20)
+				{
+					ayun = 380;
+				}		
+				else if (ayun <=380 && ayun >340)
+					{
+						ayun = ayun - 2;
+					}
+					else if (ayun ==340)
+						{
+							ayun = -20;
+						}
+		
+		
+				
+	}
+	if (key == 'k') 
+	{
+		spin = spin + 5;
+		if (spin == 360)
+			{
+				spin = 0;
+			}
+	}
 	
 	
 }
